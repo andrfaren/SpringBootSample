@@ -1,5 +1,6 @@
 package com.example.springbootsample.hello;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HelloController {
+
+    @Autowired
+    private HelloService service;
 
     @GetMapping("/hello")
     public String getHello() {
@@ -22,5 +26,17 @@ public class HelloController {
 
         // Screen transition to response.html
         return "hello/response";
+    }
+
+    @PostMapping("/hello/db")
+    public String postDbRequest(@RequestParam("text2") String id, Model model) {
+        // Search one
+        Employee employee = service.getEmployee(id);
+
+        // Save search result to Model
+        model.addAttribute("employee", employee);
+
+        // Change page to db.html
+        return "hello/db";
     }
 }
